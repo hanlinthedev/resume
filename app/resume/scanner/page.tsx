@@ -6,9 +6,11 @@ import { useActionState, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import ResumeAnalysisResult from "@/components/commons/ResumeAnalysisResult";
 import { checkResume } from "./_actions";
 import ResumeInput from "@/components/commons/ResumeInput";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
+import ResumeScannerResult from "@/components/commons/ResumeScannerResult";
 
 export default function ResumePage() {
   const [file, setFile] = useState<File | null>(null);
@@ -25,15 +27,13 @@ export default function ResumePage() {
   return (
     <main className="container mx-auto p-4 min-h-screen">
       <div
-        className={`flex flex-col md:flex-row gap-6 transition-all duration-500 ease-in-out ${
-          analysis || pending ? "justify-between" : "justify-center"
-        }`}
+        className={`flex flex-col   gap-6 transition-all duration-500 ease-in-out items-center`}
       >
         {/* Upload Form */}
         <form
           action={(e) => checkResumeAction(e)}
           className={`transition-all duration-500 ease-in-out ${
-            analysis || pending ? "md:w-1/2" : "w-full max-w-xl mx-auto"
+            analysis || pending ? "hidden sm:w-1/2" : "w-full max-w-xl mx-auto"
           }`}
         >
           <Card className="p-6 border-2 border-blue-100">
@@ -41,6 +41,21 @@ export default function ResumePage() {
               Upload Your Resume Here
             </h1>
             <ResumeInput file={file} handleFileChange={handleFileChange} />
+
+            <div>
+              <Label
+                htmlFor="jobDescription"
+                className="text-sm font-medium text-gray-700 mb-1"
+              >
+                Job Description
+              </Label>
+              <Textarea
+                id="jobDescription"
+                placeholder="Paste the job description here..."
+                name="jobDescription"
+                className="w-full min-h-[100px]"
+              />
+            </div>
           </Card>
           <Button
             type="submit"
@@ -54,7 +69,7 @@ export default function ResumePage() {
         {/* Results Section */}
         {(pending || analysis) && (
           <div
-            className={`md:w-1/2 transition-all duration-500 ease-in-out ${
+            className={`lg:w-1/2 transition-all duration-500 ease-in-out ${
               pending || analysis
                 ? "animate-in fade-in slide-in-from-right-10 duration-500"
                 : ""
@@ -69,7 +84,7 @@ export default function ResumePage() {
                   </p>
                 </div>
               ) : analysis ? (
-                <ResumeAnalysisResult analysis={analysis} />
+                <ResumeScannerResult analysis={analysis} />
               ) : null}
             </Card>
           </div>
